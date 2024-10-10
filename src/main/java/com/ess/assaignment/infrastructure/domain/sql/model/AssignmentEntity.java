@@ -25,6 +25,9 @@ public class AssignmentEntity {
     @Column(name = "ASSIGNMENT_TITLE")
     private String assignmentTitle;
 
+    @Column(name = "PROJECT_ID")
+    private String projectId;
+
     @Column(name = "SUBSCRIPTION_ID")
     private Long subscrptionId;
 

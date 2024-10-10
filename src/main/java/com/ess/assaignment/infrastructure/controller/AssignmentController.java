@@ -13,6 +13,7 @@ import java.util.Date;
 
 @RestController
 @RequestMapping(AssignmentConstants.ASSIGNMENT_PATH_URL)
+@CrossOrigin("*")
 public class AssignmentController {
 
     @Autowired
@@ -64,50 +65,56 @@ public class AssignmentController {
     }
 
     // Search by Assignment Code
-    @GetMapping("/search/code")
+    @GetMapping(AssignmentConstants.SEARCH_BY_CODE)
     public ResponseEntity<ApiResponse> searchByAssignmentCode(@RequestParam String assignmentCode) {
         return ResponseEntity.ok(assignmentService.searchByAssignmentCode(assignmentCode));
     }
 
+//    // Search by projectId
+//    @GetMapping(AssignmentConstants.SEARCH_BY_PROJ_ID)
+//    public ResponseEntity<ApiResponse> searchByProjectId(@RequestParam String projectId) {
+//        return ResponseEntity.ok(assignmentService.searchByProjectId(projectId));
+//    }
+
     // Search by Status
-    @GetMapping("/search/status")
+    @GetMapping(AssignmentConstants.SEARCH_BY_STATUS)
     public ResponseEntity<ApiResponse> searchByStatus(@RequestParam Status status) {
         return ResponseEntity.ok(assignmentService.searchByStatus(status));
     }
 
     // Search by Placement Type
-    @GetMapping("/search/placement")
+    @GetMapping(AssignmentConstants.SEARCH_BY_PLACEMENT)
     public ResponseEntity<ApiResponse> searchByPlacementType(@RequestParam PlacementType placementType) {
         return ResponseEntity.ok(assignmentService.searchByPlacementType(placementType));
     }
 
     // Search by Work Location Country
-    @GetMapping("/search/location")
+    @GetMapping(AssignmentConstants.SEARCH_BY_LOCATION)
     public ResponseEntity<ApiResponse> searchByWorkLocationCountry(@RequestParam String country) {
         return ResponseEntity.ok(assignmentService.searchByWorkLocationCountry(country));
     }
 
     // Search by Employee Name
-    @GetMapping("/search/employee")
+    @GetMapping(AssignmentConstants.SEARCH_BY_EMPLOYEE)
     public ResponseEntity<ApiResponse> searchByEmployeeName(@RequestParam String name) {
         return ResponseEntity.ok(assignmentService.searchByEmployeeName(name));
     }
 
     // Search by Billing Pay Rate
-    @GetMapping("/search/payrate")
+    @GetMapping(AssignmentConstants.SEARCH_BY_PAY_RATE)
     public ResponseEntity<ApiResponse> searchByBillingPayRate(@RequestParam double payRate) {
         return ResponseEntity.ok(assignmentService.searchByBillingPayRate(payRate));
     }
 
     // Search by Date Range
-    @GetMapping("/search/dates")
+    @GetMapping(AssignmentConstants.SEARCH_BY_DATES)
     public ResponseEntity<ApiResponse> searchByDateRange(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
                                                          @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
         return ResponseEntity.ok(assignmentService.searchByDateRange(startDate, endDate));
     }
 
 
-    @GetMapping("/search")
+    @GetMapping(AssignmentConstants.SEARCH_BY_SEARCH)
     public ResponseEntity<ApiResponse> globalSearch(
             @RequestParam(required = false) String assignmentCode,
             @RequestParam(required = false) String country,

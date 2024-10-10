@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class AssignmentMapperImpl implements AssignmentMapper {
+public class  AssignmentMapperImpl implements AssignmentMapper {
 
     @Autowired
     private ModelMapper modelMapper;
@@ -60,21 +60,21 @@ public class AssignmentMapperImpl implements AssignmentMapper {
         // Map BillingEntity -> BillingDTO
         if (entity.getBillingEntity() != null) {
             BillingDTO billingDTO = modelMapper.map(entity.getBillingEntity(), BillingDTO.class);
-            billingDTO.setLinkId(assignmentDTO.getAssignmentId());
+            billingDTO.setAssignmentIdRef(assignmentDTO.getAssignmentId());
             assignmentDTO.setBillingDTO(billingDTO);
         }
 
         // Map RecruitmentEntity -> RecruitmentDTO
         if (entity.getRecruitmentEntity() != null) {
             RecruitmentDTO recruitmentDTO = modelMapper.map(entity.getRecruitmentEntity(), RecruitmentDTO.class);
-            recruitmentDTO.setLinkId(assignmentDTO.getAssignmentId());
+            recruitmentDTO.setAssignmentIdRef(assignmentDTO.getAssignmentId());
             assignmentDTO.setRecruitmentDTO(recruitmentDTO);
         }
 
         // Map WorkLocationEntity -> WorkLocationDTO
         if (entity.getWorkLocationEntity() != null) {
             WorkLocationDTO workLocationDTO = modelMapper.map(entity.getWorkLocationEntity(), WorkLocationDTO.class);
-            workLocationDTO.setLinkId(assignmentDTO.getAssignmentId());
+            workLocationDTO.setAssignmentIdRef(assignmentDTO.getAssignmentId());
             assignmentDTO.setWorkLocationDTO(workLocationDTO);
         }
 
@@ -83,7 +83,7 @@ public class AssignmentMapperImpl implements AssignmentMapper {
             List<EmployeeDTO> employeeDTOList = new ArrayList<>();
             for (EmployeeEntity employeeEntity : entity.getEmployeeEntity()) {
                 EmployeeDTO employeeDTO = modelMapper.map(employeeEntity, EmployeeDTO.class);
-                employeeDTO.setLinkId(assignmentDTO.getAssignmentId());  // Set assignment reference
+                employeeDTO.setAssignmentIdRef(assignmentDTO.getAssignmentId());  // Set assignment reference
                 employeeDTOList.add(employeeDTO);
             }
             assignmentDTO.setEmployeeDTOS(employeeDTOList);  // Set the list of employees

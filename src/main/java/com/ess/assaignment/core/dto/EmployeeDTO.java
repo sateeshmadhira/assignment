@@ -7,7 +7,7 @@ public class EmployeeDTO {
 
     private Long id;
     private String employeeId;
-    private Long linkId;
+    private Long assignmentIdRef;
     private String name;
     private String email;
     private String mobileNo;

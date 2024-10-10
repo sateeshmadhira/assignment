@@ -7,7 +7,7 @@ import lombok.Data;
 public class BillingDTO {
 
     private Long id;
-    private Long linkId;
+    private Long assignmentIdRef;
     private PayType payType;
     private BillType billType;
     private double payRate;

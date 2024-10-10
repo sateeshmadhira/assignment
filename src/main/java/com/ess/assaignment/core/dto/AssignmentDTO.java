@@ -15,6 +15,7 @@ public class AssignmentDTO {
     private String assignmentTitle;
     private Date startDate;
     private Long subscrptionId;
+    private String projectId;
     private Date endDate;
     private Status status;
     private PlacementType placementType;

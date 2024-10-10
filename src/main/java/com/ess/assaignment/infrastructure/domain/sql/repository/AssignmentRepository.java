@@ -16,6 +16,10 @@ public interface AssignmentRepository extends JpaRepository<AssignmentEntity,Lon
 
     // Search by Assignment Code
     List<AssignmentEntity> findByAssignmentCode(String assignmentCode);
+
+//    // Search by ProjectId
+//    List<AssignmentEntity> findByProjectId(String projectId);
+
     // Search by Status
     List<AssignmentEntity> findByStatus(Status status);
 

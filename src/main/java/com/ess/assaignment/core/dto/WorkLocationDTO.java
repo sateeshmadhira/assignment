@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class WorkLocationDTO {
     private Long id;
-    private Long linkId;
+    private Long assignmentIdRef;
     private WorkType workType;
     private String country;
     private String city;
