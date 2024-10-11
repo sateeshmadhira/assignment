@@ -1,26 +1,26 @@
 package com.ess.assaignment.infrastructure.security.config;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.ReactiveAuthenticationManager;
-import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
-import org.springframework.security.config.web.server.ServerHttpSecurity;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.web.server.SecurityWebFilterChain;
-import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
-import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
-import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
-import org.springframework.web.cors.reactive.CorsConfigurationSource;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
-import org.springframework.web.server.ServerWebExchange;
-import reactor.core.publisher.Mono;
+//import org.springframework.context.annotation.Bean;
+//import org.springframework.context.annotation.Configuration;
+//import org.springframework.security.authentication.ReactiveAuthenticationManager;
+//import org.springframework.security.authentication.UserDetailsRepositoryReactiveAuthenticationManager;
+//import org.springframework.security.config.web.server.ServerHttpSecurity;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.userdetails.MapReactiveUserDetailsService;
+//import org.springframework.security.core.userdetails.User;
+//import org.springframework.security.core.userdetails.UserDetails;
+//import org.springframework.security.web.server.SecurityWebFilterChain;
+//import org.springframework.security.web.server.authentication.AuthenticationWebFilter;
+//import org.springframework.security.web.server.authentication.ServerAuthenticationSuccessHandler;
+//import org.springframework.security.web.server.util.matcher.ServerWebExchangeMatchers;
+//import org.springframework.web.cors.reactive.CorsConfigurationSource;
+//import org.springframework.web.cors.CorsConfiguration;
+//import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource;
+//import org.springframework.web.server.ServerWebExchange;
+//import reactor.core.publisher.Mono;
 
 import java.util.List;
 import java.util.function.Function;
-@Configuration
+//@Configuration
 public class SecurityConfig {
 //    @Bean
 //    public MapReactiveUserDetailsService userDetailsRepository() {

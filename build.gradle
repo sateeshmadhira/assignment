@@ -23,49 +23,62 @@ repositories {
 	mavenCentral()
 }
 
-dependencies {
-	implementation('org.springframework.boot:spring-boot-starter') {
-		exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
-		exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j2-impl'
-	}
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	implementation ('org.springframework.boot:spring-boot-starter-webflux')
+//dependencies {
+	//implementation('org.springframework.boot:spring-boot-starter') {
+		//exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+		//exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j2-impl'
+	//}
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	//implementation ('org.springframework.boot:spring-boot-starter-webflux')
 
 	// Exclude log4j-slf4j2-impl if present
-	implementation ('org.springframework.boot:spring-boot-starter-log4j2') {
-		exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j2-impl'
-	}
+	//implementation ('org.springframework.boot:spring-boot-starter-log4j2') {
+	//	exclude group: 'org.apache.logging.log4j', module: 'log4j-slf4j2-impl'
+	//}
 
-	implementation 'io.jsonwebtoken:jjwt:0.9.1'
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
-	implementation 'org.springframework.security:spring-security-config'
-	implementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
-	implementation 'io.springfox:springfox-swagger-ui:3.0.0'
-	implementation 'io.springfox:springfox-swagger2:3.0.0'
-	implementation 'com.nimbusds:nimbus-jose-jwt:9.37.2' // Replace with the latest version
-	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.2.0'
-	runtimeOnly 'com.h2database:h2'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
+	//implementation 'io.jsonwebtoken:jjwt:0.9.1'
+	//implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	//implementation 'org.springframework.boot:spring-boot-starter-validation'
+	//implementation 'org.springframework.security:spring-security-config'
+	//implementation("jakarta.servlet:jakarta.servlet-api:5.0.0")
+	//implementation 'io.springfox:springfox-swagger-ui:3.0.0'
+	//implementation 'io.springfox:springfox-swagger2:3.0.0'
+	//implementation 'com.nimbusds:nimbus-jose-jwt:9.37.2' // Replace with the latest version
+	//implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.2.0'
+	//runtimeOnly 'com.h2database:h2'
+	//developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	//compileOnly 'org.projectlombok:lombok'
+	//annotationProcessor 'org.projectlombok:lombok'
 	// Remove the Docker Compose dependency
 	// developmentOnly 'org.springframework.boot:spring-boot-docker-compose'
-	runtimeOnly 'org.postgresql:postgresql'
+	//runtimeOnly 'org.postgresql:postgresql'
 
 	// Test dependencies
-	testImplementation ('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-	testImplementation 'org.springframework.security:spring-security-test'
-	testImplementation 'org.mockito:mockito-core:4.0.0'
-	testImplementation 'org.assertj:assertj-core:3.21.0'
-	testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.3'
-	testImplementation 'io.projectreactor:reactor-test'
-	testImplementation 'org.mockito:mockito-core:3.12.4'
-	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
-	testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+	//testImplementation ('org.springframework.boot:spring-boot-starter-test') {
+	//	exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+	//}
+	//testImplementation 'org.springframework.security:spring-security-test'
+	//testImplementation 'org.mockito:mockito-core:4.0.0'
+	//testImplementation 'org.assertj:assertj-core:3.21.0'
+	//testImplementation 'com.squareup.okhttp3:mockwebserver:4.9.3'
+	//testImplementation 'io.projectreactor:reactor-test'
+	//testImplementation 'org.mockito:mockito-core:3.12.4'
+	//testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
+	//testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
+//}
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'org.postgresql:postgresql'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// https://mvnrepository.com/artifact/org.mapstruct/mapstruct
+	implementation group: 'org.mapstruct', name: 'mapstruct', version: '1.6.2'
+	// https://mvnrepository.com/artifact/org.modelmapper/modelmapper
+	implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.2.1'
 }
 
 tasks.named('test') {

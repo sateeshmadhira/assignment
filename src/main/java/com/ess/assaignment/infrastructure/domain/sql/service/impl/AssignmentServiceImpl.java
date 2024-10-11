@@ -99,12 +99,12 @@ public class AssignmentServiceImpl {
         List<AssignmentDTO> assignmentDTOs = assignments.stream().map(assignmentMapper::toDTO).toList();
         return new ApiResponse(true, "Assignments found by code", assignmentDTOs, null);
     }
-//    // Search by ProjectId
-//    public ApiResponse searchByProjectId(String projectId) {
-//        List<AssignmentEntity> assignments = assignmentRepository.findByProjectId(projectId);
-//        List<AssignmentDTO> assignmentDTOs = assignments.stream().map(assignmentMapper::toDTO).toList();
-//        return new ApiResponse(true, "Assignments found by code", assignmentDTOs, null);
-//    }
+    // Search by ProjectId
+    public ApiResponse searchByProjectId(String projectId) {
+        List<AssignmentEntity> assignments = assignmentRepository.findByProjectId(projectId);
+        List<AssignmentDTO> assignmentDTOs = assignments.stream().map(assignmentMapper::toDTO).toList();
+        return new ApiResponse(true, "Assignments found by code", assignmentDTOs, null);
+    }
 
     // Search by Status
     public ApiResponse searchByStatus(Status status) {

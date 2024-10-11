@@ -70,11 +70,11 @@ public class AssignmentController {
         return ResponseEntity.ok(assignmentService.searchByAssignmentCode(assignmentCode));
     }
 
-//    // Search by projectId
-//    @GetMapping(AssignmentConstants.SEARCH_BY_PROJ_ID)
-//    public ResponseEntity<ApiResponse> searchByProjectId(@RequestParam String projectId) {
-//        return ResponseEntity.ok(assignmentService.searchByProjectId(projectId));
-//    }
+    // Search by projectId
+    @GetMapping(AssignmentConstants.SEARCH_BY_PROJ_ID)
+    public ResponseEntity<ApiResponse> searchByProjectId(@RequestParam String projectId) {
+        return ResponseEntity.ok(assignmentService.searchByProjectId(projectId));
+    }
 
     // Search by Status
     @GetMapping(AssignmentConstants.SEARCH_BY_STATUS)
