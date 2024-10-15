@@ -1,6 +1,7 @@
 package com.ess.assaignment.infrastructure.domain.sql.model;
 
 import com.ess.assaignment.core.utils.BillType;
+import com.ess.assaignment.core.utils.CurrencyType;
 import com.ess.assaignment.core.utils.PayType;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -20,6 +21,9 @@ public class BillingEntity {
 
     @Enumerated(EnumType.STRING)
     private BillType billType;
+
+    @Enumerated(EnumType.STRING)
+    private CurrencyType currencyType;
 
     @Column(name = "PAY_RATE")
     private double payRate;

@@ -73,6 +73,7 @@ public class AssignmentServiceImpl {
         return new ApiResponse(false, "Assignment not found", null, null);
     }
 
+    // Get All Assignments
     public ApiResponse getAllAssignments(int page, int pageSize) {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.unsorted());
