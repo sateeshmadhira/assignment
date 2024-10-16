@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AssignmentRepository extends JpaRepository<AssignmentEntity,Long> {
@@ -46,15 +47,12 @@ public interface AssignmentRepository extends JpaRepository<AssignmentEntity,Lon
     // Global search query to match any of the criteria: assignmentCode, country, assignmentTitle, status
     @Query("SELECT a FROM AssignmentEntity a " +
             "LEFT JOIN a.workLocationEntity w " +
-            "WHERE (:assignmentCode IS NULL OR a.assignmentCode LIKE %:assignmentCode%) " +
-            "AND (:country IS NULL OR w.country LIKE %:country%) " +
-            "AND (:assignmentTitle IS NULL OR a.assignmentTitle LIKE %:assignmentTitle%) " +
-            "AND (:status IS NULL OR a.status = :status)")
-    List<AssignmentEntity> globalSearch(
-            @Param("assignmentCode") String assignmentCode,
-            @Param("country") String country,
-            @Param("assignmentTitle") String assignmentTitle,
-            @Param("status") Status status
-    );
+            "WHERE (:searchKey IS NULL OR a.assignmentCode LIKE %:searchKey% " +
+            "OR w.country LIKE %:searchKey% " +
+            "OR a.assignmentTitle LIKE %:searchKey%)")
+    List<AssignmentEntity> globalSearch(@Param("searchKey") String searchKey);
+
+    // Fetch the latest assignment by ID in descending order
+    Optional<AssignmentEntity> findTopByOrderByAssignmentIdDesc();
 
 }

@@ -116,14 +116,15 @@ public class AssignmentController {
 
     @GetMapping(AssignmentConstants.SEARCH_BY_SEARCH)
     public ResponseEntity<ApiResponse> globalSearch(
-            @RequestParam(required = false) String assignmentCode,
-            @RequestParam(required = false) String country,
-            @RequestParam(required = false) String assignmentTitle,
-            @RequestParam(required = false) Status status) {
+            @RequestParam(required = false) String searchKey) {
 
-        ApiResponse response = assignmentService.globalSearch(assignmentCode, country, assignmentTitle, status);
+        System.out.println("Search key: " + searchKey);
+        ApiResponse response = assignmentService.globalSearch(searchKey);
         return ResponseEntity.ok(response);
     }
+
+
+
 
 
 }

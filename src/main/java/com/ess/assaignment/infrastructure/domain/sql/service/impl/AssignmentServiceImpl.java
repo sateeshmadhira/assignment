@@ -34,15 +34,37 @@ public class AssignmentServiceImpl {
 
     // Create Assignment
     public ApiResponse createAssignment(AssignmentRequest assignmentRequest) {
+        try {
+            // Fetch the latest assignment if available to generate the next code
+            Optional<AssignmentEntity> latestAssignment = assignmentRepository
+                    .findTopByOrderByAssignmentIdDesc();
 
-        AssignmentEntity assignmentEntity = assignmentMapper.toEntity(assignmentRequest.getAssignmentDTO());
+            // Generate assignment code: Increment the latest code or start from "ASG-001"
+            String assignmentCode = latestAssignment
+                    .map(a -> {
+                        String latestCode = a.getAssignmentCode().substring(4);  // Extract numeric part
+                        int nextCodeNumber = Integer.parseInt(latestCode) + 1;
+                        return "ASG-" + String.format("%03d", nextCodeNumber);  // Format as ASG-002, etc.
+                    })
+                    .orElse("ASG-001");  // Default to "ASG-001" if no previous assignment exists
 
-        AssignmentEntity savedEntity = assignmentRepository.save(assignmentEntity);
+            // Map request to entity and set the generated code
+            AssignmentEntity assignmentEntity = assignmentMapper.toEntity(assignmentRequest.getAssignmentDTO());
+            assignmentEntity.setAssignmentCode(assignmentCode);
 
-        AssignmentDTO savedDTO = assignmentMapper.toDTO(savedEntity);
+            // Save the assignment entity
+            AssignmentEntity savedEntity = assignmentRepository.save(assignmentEntity);
 
-        return new ApiResponse(true, "Assignment created successfully", savedDTO, null);
+            // Return success response
+            return new ApiResponse(true, "Assignment created successfully",
+                    assignmentMapper.toDTO(savedEntity), null);
+
+        } catch (Exception e) {
+            // Handle exceptions
+            return new ApiResponse(false, "Failed to create assignment: " + e.getMessage(), null, null);
+        }
     }
+
 
     // Get Assignment by ID
     public ApiResponse getAssignmentById(Long id) {
@@ -77,7 +99,6 @@ public class AssignmentServiceImpl {
     public ApiResponse getAllAssignments(int page, int pageSize) {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.unsorted());
-
         Page<AssignmentEntity> assignmentPage = assignmentRepository.findAll(pageable);
         List<AssignmentDTO> assignments = assignmentPage.getContent().stream()
                 .map(assignmentMapper::toDTO)
@@ -90,7 +111,6 @@ public class AssignmentServiceImpl {
                 assignmentPage.getTotalElements(),
                 assignmentPage.getSize()
         );
-
         return new ApiResponse(true, "Assignments retrieved successfully", null, paginationResponse);
     }
 
@@ -149,10 +169,12 @@ public class AssignmentServiceImpl {
         return new ApiResponse(true, "Assignments found by date range", assignmentDTOs, null);
     }
 
-    public ApiResponse globalSearch(String assignmentCode, String country, String assignmentTitle, Status status) {
-        // Call repository global search method
-        List<AssignmentEntity> assignmentEntities = assignmentRepository.globalSearch(assignmentCode, country, assignmentTitle, status);
-        List<AssignmentDTO> assignmentDTOs = assignmentEntities.stream().map(assignmentMapper::toDTO).toList();
+    public ApiResponse globalSearch(String searchKey) {
+        List<AssignmentEntity> assignmentEntities = assignmentRepository.globalSearch(searchKey);
+
+        List<AssignmentDTO> assignmentDTOs = assignmentEntities.stream()
+                .map(assignmentMapper::toDTO)
+                .toList();
 
         if (assignmentDTOs.isEmpty()) {
             return new ApiResponse(false, "No assignments found matching the criteria", null, null);
@@ -160,4 +182,7 @@ public class AssignmentServiceImpl {
 
         return new ApiResponse(true, "Assignments found", assignmentDTOs, null);
     }
+
+
+
 }

@@ -27,6 +27,7 @@ public class BillingEntity {
 
     @Column(name = "PAY_RATE")
     private double payRate;
+
     @Column(name = "COMMENTS")
     private String comments;
 
