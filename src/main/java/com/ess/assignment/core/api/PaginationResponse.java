@@ -12,11 +12,12 @@ import java.util.List;
 @AllArgsConstructor
 public class PaginationResponse<T> implements Serializable {
 
-    private List<T> content= new ArrayList<>();
+
     private int currentPage;
     private int totalPages;
     private long totalItems;
     private int pageSize;
+    private List<T> content= new ArrayList<>();
 
 }
 

@@ -4,6 +4,8 @@ import com.ess.assignment.core.utils.CurrencyType;
 import com.ess.assignment.core.utils.PayType;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class BillingDTO {
 
@@ -13,5 +15,6 @@ public class BillingDTO {
     private BillType billType;
     private CurrencyType currencyType;
     private double payRate;
+    private Date effectiveForm;
     private String comments;
 }

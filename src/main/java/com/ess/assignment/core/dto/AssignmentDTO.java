@@ -23,6 +23,7 @@ public class AssignmentDTO {
     private WorkLocationDTO workLocationDTO ;
     private RecruitmentDTO recruitmentDTO ;
     private BillingDTO billingDTO ;
+    private String endClient;
     private List<EmployeeDTO> employeeDTOS;
 
 }

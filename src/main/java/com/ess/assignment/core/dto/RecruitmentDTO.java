@@ -9,4 +9,6 @@ public class RecruitmentDTO {
     private String accountManager;
     private Long jobId;
     private String recruitmentManager;
+    private String recruiter;
+    private String externalRecruiter;
 }

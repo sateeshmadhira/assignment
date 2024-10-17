@@ -30,100 +30,110 @@ public class AssignmentController {
     @GetMapping(AssignmentConstants.ID)
     public ResponseEntity<ApiResponse> getAssignmentById(@PathVariable("ID") Long id) {
         ApiResponse response = assignmentService.getAssignmentById(id);
-        if (response.isSuccess()) {
-            return ResponseEntity.ok(response);
-        }
-        return ResponseEntity.status(404).body(response);
+        return response.isSuccess() ? ResponseEntity.ok(response) : ResponseEntity.status(404).body(response);
     }
 
     // Update Assignment
     @PutMapping(AssignmentConstants.ID)
     public ResponseEntity<ApiResponse> updateAssignment(@PathVariable("ID") Long id, @RequestBody AssignmentRequest assignmentRequest) {
         ApiResponse response = assignmentService.updateAssignment(id, assignmentRequest);
-        if (response.isSuccess()) {
-            return ResponseEntity.ok(response);
-        }
-        return ResponseEntity.status(404).body(response);
+        return response.isSuccess() ? ResponseEntity.ok(response) : ResponseEntity.status(404).body(response);
     }
 
-    // Delete Assignment
-    @DeleteMapping(AssignmentConstants.ID)
-    public ResponseEntity<ApiResponse> deleteAssignment(@PathVariable Long id) {
-        ApiResponse response = assignmentService.deleteAssignment(id);
-        if (response.isSuccess()) {
-            return ResponseEntity.ok(response);
-        }
-        return ResponseEntity.status(404).body(response);
-    }
+//    // Delete Assignment
+//    @DeleteMapping(AssignmentConstants.ID)
+//    public ResponseEntity<ApiResponse> deleteAssignment(@PathVariable Long id) {
+//        ApiResponse response = assignmentService.deleteAssignment(id);
+//        return response.isSuccess() ? ResponseEntity.ok(response) : ResponseEntity.status(404).body(response);
+//    }
 
-    // Get All Assignments with Pagination (default parameters)
+    // Get All Assignments with Pagination
     @GetMapping
-    public ResponseEntity<ApiResponse> getAllAssignments(@RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "10") int pageSize) {
+    public ResponseEntity<ApiResponse> getAllAssignments(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
         ApiResponse response = assignmentService.getAllAssignments(page, pageSize);
         return ResponseEntity.ok(response);
     }
 
-    // Search by Assignment Code
+    // Search by Assignment Code with Pagination
     @GetMapping(AssignmentConstants.SEARCH_BY_CODE)
-    public ResponseEntity<ApiResponse> searchByAssignmentCode(@RequestParam String assignmentCode) {
-        return ResponseEntity.ok(assignmentService.searchByAssignmentCode(assignmentCode));
+    public ResponseEntity<ApiResponse> searchByAssignmentCode(
+            @RequestParam String assignmentCode,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        ApiResponse response = assignmentService.searchByAssignmentCode(assignmentCode, page, pageSize);
+        return ResponseEntity.ok(response);
     }
 
-    // Search by projectId
+    // Search by Project ID with Pagination
     @GetMapping(AssignmentConstants.SEARCH_BY_PROJ_ID)
-    public ResponseEntity<ApiResponse> searchByProjectId(@RequestParam String projectId) {
-        return ResponseEntity.ok(assignmentService.searchByProjectId(projectId));
+    public ResponseEntity<ApiResponse> searchByProjectId(
+            @RequestParam String projectId,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        ApiResponse response = assignmentService.searchByProjectId(projectId, page, pageSize);
+        return ResponseEntity.ok(response);
     }
 
-    // Search by Status
-    @GetMapping(AssignmentConstants.SEARCH_BY_STATUS)
-    public ResponseEntity<ApiResponse> searchByStatus(@RequestParam Status status) {
-        return ResponseEntity.ok(assignmentService.searchByStatus(status));
-    }
-
-    // Search by Placement Type
-    @GetMapping(AssignmentConstants.SEARCH_BY_PLACEMENT)
-    public ResponseEntity<ApiResponse> searchByPlacementType(@RequestParam PlacementType placementType) {
-        return ResponseEntity.ok(assignmentService.searchByPlacementType(placementType));
-    }
-
-    // Search by Work Location Country
+    // Search by Work Location Country with Pagination
     @GetMapping(AssignmentConstants.SEARCH_BY_LOCATION)
-    public ResponseEntity<ApiResponse> searchByWorkLocationCountry(@RequestParam String country) {
-        return ResponseEntity.ok(assignmentService.searchByWorkLocationCountry(country));
+    public ResponseEntity<ApiResponse> searchByWorkLocationCountry(
+            @RequestParam String country,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        ApiResponse response = assignmentService.searchByWorkLocationCountry(country, page, pageSize);
+        return ResponseEntity.ok(response);
     }
 
-    // Search by Employee Name
-    @GetMapping(AssignmentConstants.SEARCH_BY_EMPLOYEE)
-    public ResponseEntity<ApiResponse> searchByEmployeeName(@RequestParam String name) {
-        return ResponseEntity.ok(assignmentService.searchByEmployeeName(name));
+    // Search by Status with Pagination
+    @GetMapping(AssignmentConstants.SEARCH_BY_STATUS)
+    public ResponseEntity<ApiResponse> searchByStatus(
+            @RequestParam Status status,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        ApiResponse response = assignmentService.searchByStatus(status, page, pageSize);
+        return ResponseEntity.ok(response);
     }
 
-    // Search by Billing Pay Rate
-    @GetMapping(AssignmentConstants.SEARCH_BY_PAY_RATE)
-    public ResponseEntity<ApiResponse> searchByBillingPayRate(@RequestParam double payRate) {
-        return ResponseEntity.ok(assignmentService.searchByBillingPayRate(payRate));
+    // Search by Placement Type with Pagination
+    @GetMapping(AssignmentConstants.SEARCH_BY_PLACEMENT)
+    public ResponseEntity<ApiResponse> searchByPlacementType(
+            @RequestParam PlacementType placementType,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        ApiResponse response = assignmentService.searchByPlacementType(placementType, page, pageSize);
+        return ResponseEntity.ok(response);
     }
 
-    // Search by Date Range
+//    // Search by Billing Pay Rate with Pagination
+//    @GetMapping(AssignmentConstants.SEARCH_BY_PAY_RATE)
+//    public ResponseEntity<ApiResponse> searchByBillingPayRate(
+//            @RequestParam double payRate,
+//            @RequestParam(defaultValue = "0") int page,
+//            @RequestParam(defaultValue = "10") int pageSize) {
+//        ApiResponse response = assignmentService.searchByBillingPayRate(payRate, page, pageSize);
+//        return ResponseEntity.ok(response);
+//    }
+
+    // Search by Date Range with Pagination
     @GetMapping(AssignmentConstants.SEARCH_BY_DATES)
-    public ResponseEntity<ApiResponse> searchByDateRange(@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
-                                                         @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate) {
-        return ResponseEntity.ok(assignmentService.searchByDateRange(startDate, endDate));
+    public ResponseEntity<ApiResponse> searchByDateRange(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDate,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int pageSize) {
+        ApiResponse response = assignmentService.searchByDateRange(startDate, endDate, page, pageSize);
+        return ResponseEntity.ok(response);
     }
 
-
+    // Global Search with Pagination
     @GetMapping(AssignmentConstants.SEARCH_BY_SEARCH)
-    public ApiResponse globalSearch(
+    public ResponseEntity<ApiResponse> globalSearch(
             @RequestParam String searchKey,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int pageSize) {
-        return assignmentService.globalSearch(searchKey, page, pageSize);
+        ApiResponse response = assignmentService.globalSearch(searchKey, page, pageSize);
+        return ResponseEntity.ok(response);
     }
-
-
-
-
-
 }

@@ -6,6 +6,8 @@ import com.ess.assignment.core.utils.PayType;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.Date;
+
 @Entity
 @Data
 @Table(name = "ASSIGNMENT_BILLING")
@@ -30,6 +32,9 @@ public class BillingEntity {
 
     @Column(name = "COMMENTS")
     private String comments;
+
+    @Column(name = "EFFECTIVE_FORM")
+    private Date effectiveForm;
 
     @OneToOne
     @JoinColumn(name = "ASSIGNMENT_ID")

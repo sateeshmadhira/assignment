@@ -18,12 +18,22 @@ public class WorkLocationEntity {
 
     @Column(name = "COUNTRY")
     private String country;
+
     @Column(name = "CITY")
     private String city;
+
+    @Column(name = "ZIP_CODE")
+    private String zipCode;
+
     @Column(name = "ADDRESS")
     private String address;
+
     @Column(name = "REPORTING_MANAGER_NAME")
     private String reportingManagerName;
+
+    @Column(name = "REPORTING_MANAGER_NUMBER")
+    private String reportingManagerNumber;
+
     @Column(name = "REPORTING_MANAGER_EMAIL")
     private String reportingManagerEmail;
 

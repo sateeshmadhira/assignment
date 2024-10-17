@@ -14,15 +14,6 @@ public class EmployeeEntity {
     @Column(name = "EMPLOYEE_ID")
     private String employeeId;
 
-    @Column(name = "EMPLOYEE_NAME")
-    private String name;
-
-    @Column(name = "EMPLOYEE_EMAIL")
-    private String email;
-
-    @Column(name = "EMPLOYEE_MOBILE_NO")
-    private String mobileNo;
-
     @ManyToOne
     @JoinColumn(name = "ASSIGNMENT_ID")
     private AssignmentEntity assignmentEntity;

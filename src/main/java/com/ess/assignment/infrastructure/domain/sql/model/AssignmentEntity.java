@@ -55,6 +55,9 @@ public class AssignmentEntity {
     @Column(name = "END_DATE")
     private Date endDate;
 
+    @Column(name = "END_CLIENT")
+    private String endClient;
+
     @OneToMany(mappedBy = "assignmentEntity", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<EmployeeEntity> employeeEntity;
 
