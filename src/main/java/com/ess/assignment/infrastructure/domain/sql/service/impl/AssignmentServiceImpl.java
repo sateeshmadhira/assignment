@@ -100,16 +100,6 @@ public class AssignmentServiceImpl {
 //        }
 //    }
 
-//    // Delete Assignment
-//    public ApiResponse deleteAssignment(Long id) {
-//        Optional<AssignmentEntity> assignmentEntityOptional = assignmentRepository.findById(id);
-//        if (assignmentEntityOptional.isPresent()) {
-//            assignmentRepository.deleteById(id);
-//            return new ApiResponse(true, "Assignment deleted successfully", null, null);
-//        }
-//        return new ApiResponse(false, "Assignment not found", null, null);
-//    }
-
     // Get All Assignments
     public ApiResponse getAllAssignments(int page, int pageSize) {
 
@@ -130,15 +120,38 @@ public class AssignmentServiceImpl {
     }
 
     // Global Search with Pagination
-    public ApiResponse globalSearch(String searchKey, int page, int pageSize) {
-        Pageable pageable = PageRequest.of(page, pageSize);
-        Page<AssignmentEntity> assignmentEntities = assignmentRepository.globalSearch(searchKey, pageable);
+//    public ApiResponse globalSearch(String searchKey, int page, int pageSize) {
+//        Pageable pageable = PageRequest.of(page, pageSize);
+//        Page<AssignmentEntity> assignmentEntities = assignmentRepository.globalSearch(searchKey, pageable);
+//
+//        if (assignmentEntities.isEmpty()) {
+//            throw new EntityNotFoundException("No assignments found matching the criteria: " + searchKey);
+//        }
+//
+//        return new ApiResponse(true, "Assignments found", null, createPaginationResponse(assignmentEntities));
+//    }
 
-        if (assignmentEntities.isEmpty()) {
-            throw new EntityNotFoundException("No assignments found matching the criteria: " + searchKey);
+    public ApiResponse globalSearch(String searchKey,int page,int pageSize) {
+        Pageable pageable = PageRequest.of(page, pageSize);
+        Page<AssignmentEntity> assignmentEntities = assignmentRepository.globalSearch(searchKey,pageable);
+
+        List<AssignmentDTO> assignmentDTOs = assignmentEntities.stream()
+                .map(assignmentMapper::toDTO)
+                .toList();
+
+        PaginationResponse<AssignmentDTO> paginationResponse = new PaginationResponse<>(
+                assignmentEntities.getNumber(),
+                assignmentEntities.getTotalPages(),
+                assignmentEntities.getTotalElements(),
+                assignmentEntities.getSize(),
+                assignmentDTOs
+        );
+
+        if (assignmentDTOs.isEmpty()) {
+            return new ApiResponse(false, "No assignments found matching the criteria", null, paginationResponse);
         }
 
-        return new ApiResponse(true, "Assignments found", null, createPaginationResponse(assignmentEntities));
+        return new ApiResponse(true, "Assignments found", null, paginationResponse);
     }
 
     // Search by Assignment Code with Pagination
