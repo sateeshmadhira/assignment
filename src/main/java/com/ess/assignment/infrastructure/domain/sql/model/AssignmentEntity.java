@@ -61,5 +61,8 @@ public class AssignmentEntity {
     @OneToMany(mappedBy = "assignmentEntity", cascade = CascadeType.ALL , fetch = FetchType.LAZY)
     private List<EmployeeEntity> employeeEntity;
 
+    @Column(name = "IS_ACTIVE", nullable = false)
+    private Integer isActive = 1;  // Default to active
+
 
 }

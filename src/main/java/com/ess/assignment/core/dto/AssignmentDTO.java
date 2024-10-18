@@ -25,5 +25,6 @@ public class AssignmentDTO {
     private BillingDTO billingDTO ;
     private String endClient;
     private List<EmployeeDTO> employeeDTOS;
+    private int isActive=1;
 
 }

@@ -1,26 +1,25 @@
 package com.ess.assignment.infrastructure.domain.sql.service.impl;
-import com.ess.assignment.core.api.ApiResponse;
-import com.ess.assignment.core.api.PaginationResponse;
+import com.ess.assignment.core.resp.ApiResponse;
+import com.ess.assignment.core.resp.AssignmentCountResponse;
+import com.ess.assignment.core.resp.PaginationResponse;
 import com.ess.assignment.core.dto.AssignmentDTO;
 import com.ess.assignment.core.exception.GlobalExceptionHandler;
 import com.ess.assignment.core.req.AssignmentRequest;
 import com.ess.assignment.core.utils.PlacementType;
 import com.ess.assignment.core.utils.Status;
 import com.ess.assignment.infrastructure.domain.sql.model.AssignmentEntity;
-import com.ess.assignment.infrastructure.domain.sql.model.EmployeeEntity;
 import com.ess.assignment.infrastructure.domain.sql.repository.AssignmentRepository;
 import com.ess.assignment.infrastructure.domain.sql.service.handler.AssignmentMapper;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+
+import java.util.*;
 
 @Service
 public class AssignmentServiceImpl {
@@ -57,48 +56,89 @@ public class AssignmentServiceImpl {
                         return "ASG-" + String.format("%03d", nextCodeNumber);
                     })
                     .orElse("ASG-001");
-
             AssignmentEntity assignmentEntity = assignmentMapper.toEntity(assignmentRequest.getAssignmentDTO());
             assignmentEntity.setAssignmentCode(assignmentCode);
+            if (assignmentEntity.getStatus() == Status.COMPLETED) {
+                assignmentEntity.setIsActive(0);
+            } else {
+                assignmentEntity.setIsActive(1);
+            }
             AssignmentEntity savedEntity = assignmentRepository.save(assignmentEntity);
-
             return new ApiResponse(true, "Assignment created successfully",
                     assignmentMapper.toDTO(savedEntity), null);
         } catch (Exception e) {
             throw new IllegalArgumentException("Failed to create assignment: " + e.getMessage());
         }
     }
-
     // Get Assignment by ID
     public ApiResponse getAssignmentById(Long id) {
         return assignmentRepository.findById(id)
                 .map(entity -> new ApiResponse(true, "Assignment found", assignmentMapper.toDTO(entity), null))
                 .orElseThrow(() -> new EntityNotFoundException("Assignment with ID " + id + " not found"));
     }
+    // Get All Assignments With Counts
+    public ApiResponse getAllAssignmentsWithCounts() {
 
-    // Update Assignment
-    public ApiResponse updateAssignment(Long id, AssignmentRequest assignmentRequest) {
-        if (assignmentRepository.existsById(id)) {
-            AssignmentEntity assignmentEntity = assignmentMapper.toEntity(assignmentRequest.getAssignmentDTO());
-            //assignmentEntity.setAssignmentId(id);  // Preserve the ID to avoid creating a new record
-            AssignmentEntity updatedEntity = assignmentRepository.save(assignmentEntity);
+        // Counts for active and inactive assignments
+        long activeCount = assignmentRepository.countByIsActive(1);
+        long inactiveCount = assignmentRepository.countByIsActive(0);
 
-            return new ApiResponse(true, "Assignment updated successfully",
-                    assignmentMapper.toDTO(updatedEntity), null);
-        } else {
-            throw new EntityNotFoundException("Assignment with ID " + id + " not found");
-        }
+        // Counts for statuses
+        long yetToStartCount = assignmentRepository.countByStatus(Status.YET_TO_START);
+        long ongoingCount = assignmentRepository.countByStatus(Status.ONGOING);
+        long completedCount = assignmentRepository.countByStatus(Status.COMPLETED);
+
+        activeCount=yetToStartCount+ongoingCount;
+        inactiveCount=completedCount;
+
+        long totalAssignments = assignmentRepository.count();
+
+        AssignmentCountResponse response = new AssignmentCountResponse
+                (totalAssignments, activeCount, inactiveCount, yetToStartCount, ongoingCount, completedCount);
+
+        return new ApiResponse(true,"Getting All Assignments",response,null);
     }
 
-//    // Delete Assignment
-//    public ApiResponse deleteAssignment(Long id) {
-//        if (assignmentRepository.existsById(id)) {
-//            assignmentRepository.deleteById(id);
-//            return new ApiResponse(true, "Assignment deleted successfully", null, null);
-//        } else {
-//            throw new EntityNotFoundException("Assignment with ID " + id + " not found");
-//        }
-//    }
+   // Update assignment status and set isActive accordingly
+@Transactional
+    public ApiResponse updateAssignmentStatus(Long id, AssignmentRequest assignmentRequest) {
+        Optional<AssignmentEntity> optionalAssignment = assignmentRepository.findById(id);
+             if (optionalAssignment.isPresent()) {
+                 AssignmentEntity existingAssignment = optionalAssignment.get();
+                 AssignmentDTO assignmentDTO = assignmentRequest.getAssignmentDTO();
+                if (assignmentDTO.getAssignmentCode() != null) {
+            existingAssignment.setAssignmentCode(assignmentDTO.getAssignmentCode());
+              }
+                 if (assignmentDTO.getAssignmentTitle() != null) {
+            existingAssignment.setAssignmentTitle(assignmentDTO.getAssignmentTitle());
+              }
+                 if (assignmentDTO.getStatus() != null) {
+              existingAssignment.setStatus(assignmentDTO.getStatus());
+                 if (assignmentDTO.getStatus().equals(Status.COMPLETED)) {
+                existingAssignment.setIsActive(0);  // Set as inactive
+            } else {
+                existingAssignment.setIsActive(1);  // Set as active
+            }
+        }
+        AssignmentEntity updatedEntity = assignmentRepository.save(existingAssignment);
+        return new ApiResponse(true, "Assignment updated successfully",
+                assignmentMapper.toDTO(updatedEntity), null);
+    } else {
+        throw new EntityNotFoundException("Assignment with ID " + id + " not found");
+    }
+}
+    // Soft Delete
+    public ApiResponse softDeleteAssignment(Long assignmentId) {
+        Optional<AssignmentEntity> assignmentOptional = assignmentRepository.findById(assignmentId);
+
+        if (assignmentOptional.isEmpty()) {
+            throw new EntityNotFoundException("Assignment not found with ID: " + assignmentId);
+        }
+
+        assignmentRepository.softDeleteAssignment(assignmentId);
+
+        return new ApiResponse(true,"Soft Delete Success",null,null);
+    }
 
     // Get All Assignments
     public ApiResponse getAllAssignments(int page, int pageSize) {
@@ -116,20 +156,8 @@ public class AssignmentServiceImpl {
                 assignmentPage.getSize(),
                 assignments
         );
-        return new ApiResponse(true, "Assignments retrieved successfully", null, paginationResponse);
+        return new ApiResponse(true, "Assignments retrieved successfully",null,paginationResponse);
     }
-
-    // Global Search with Pagination
-//    public ApiResponse globalSearch(String searchKey, int page, int pageSize) {
-//        Pageable pageable = PageRequest.of(page, pageSize);
-//        Page<AssignmentEntity> assignmentEntities = assignmentRepository.globalSearch(searchKey, pageable);
-//
-//        if (assignmentEntities.isEmpty()) {
-//            throw new EntityNotFoundException("No assignments found matching the criteria: " + searchKey);
-//        }
-//
-//        return new ApiResponse(true, "Assignments found", null, createPaginationResponse(assignmentEntities));
-//    }
 
     public ApiResponse globalSearch(String searchKey,int page,int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);

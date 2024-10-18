@@ -4,9 +4,11 @@ import com.ess.assignment.core.utils.PlacementType;
 import com.ess.assignment.core.utils.Status;
 import com.ess.assignment.infrastructure.domain.sql.model.AssignmentEntity;
 import com.ess.assignment.infrastructure.domain.sql.model.EmployeeEntity;
+import jakarta.transaction.Transactional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -51,16 +53,18 @@ public interface AssignmentRepository extends JpaRepository<AssignmentEntity,Lon
             "LEFT JOIN a.workLocationEntity w " +
             "WHERE (:searchKey IS NULL OR " +
             "LOWER(a.assignmentCode) LIKE LOWER(CONCAT('%', :searchKey, '%')) OR " +
-            "LOWER(w.country) LIKE LOWER(CONCAT('%', :searchKey, '%')) OR " +
+            "LOWER(a.projectId) LIKE LOWER(CONCAT('%', :searchKey, '%')) OR " +
+            "LOWER(w.reportingManagerName) LIKE LOWER(CONCAT('%', :searchKey, '%')) OR " +
+            "LOWER(a.status) LIKE LOWER(CONCAT('%', :searchKey, '%')) OR " +
             "LOWER(a.assignmentTitle) LIKE LOWER(CONCAT('%', :searchKey, '%')))")
-    Page<AssignmentEntity> globalSearch(@Param("searchKey") String searchKey, Pageable pageable);
+    Page<AssignmentEntity>  globalSearch(@Param("searchKey") String searchKey, Pageable pageable);
 
-//    // Global search query to match any of the criteria: assignmentCode, country, assignmentTitle, status
-//    @Query("SELECT a FROM AssignmentEntity a " +
-//            "LEFT JOIN a.workLocationEntity w " +
-//            "WHERE (:searchKey IS NULL OR a.assignmentCode LIKE %:searchKey% " +
-//            "OR w.country LIKE %:searchKey% " +
-//            "OR a.assignmentTitle LIKE %:searchKey%)")
-//    Page<AssignmentEntity> globalSearch(@Param("searchKey") String searchKey,Pageable pageable);
+    // Method to find all active assignments
+    long countByIsActive(Integer isActive);
+    long countByStatus(Status status);
 
+    @Modifying
+    @Transactional
+    @Query("UPDATE AssignmentEntity a SET a.isActive = 0, a.status = 'COMPLETED' WHERE a.assignmentId = :assignmentId")
+    void softDeleteAssignment(@Param("assignmentId") Long assignmentId);
 }

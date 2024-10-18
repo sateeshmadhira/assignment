@@ -1,4 +1,4 @@
-package com.ess.assignment.core.api;
+package com.ess.assignment.core.resp;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,5 +1,5 @@
 package com.ess.assignment.infrastructure.controller;
-import com.ess.assignment.core.api.ApiResponse;
+import com.ess.assignment.core.resp.ApiResponse;
 import com.ess.assignment.core.constants.AssignmentConstants;
 import com.ess.assignment.core.req.AssignmentRequest;
 import com.ess.assignment.core.utils.PlacementType;
@@ -33,19 +33,26 @@ public class AssignmentController {
         return response.isSuccess() ? ResponseEntity.ok(response) : ResponseEntity.status(404).body(response);
     }
 
+    // Endpoint to get all assignments with their counts
+    @GetMapping(AssignmentConstants.SEARCH_BY_COUNT)
+    public ResponseEntity<ApiResponse> getAllAssignmentsWithCounts() {
+        ApiResponse response = assignmentService.getAllAssignmentsWithCounts();
+        return ResponseEntity.ok(response);
+    }
+
     // Update Assignment
     @PutMapping(AssignmentConstants.ID)
     public ResponseEntity<ApiResponse> updateAssignment(@PathVariable("ID") Long id, @RequestBody AssignmentRequest assignmentRequest) {
-        ApiResponse response = assignmentService.updateAssignment(id, assignmentRequest);
+       ApiResponse response= assignmentService.updateAssignmentStatus(id,assignmentRequest);
         return response.isSuccess() ? ResponseEntity.ok(response) : ResponseEntity.status(404).body(response);
     }
 
-//    // Delete Assignment
-//    @DeleteMapping(AssignmentConstants.ID)
-//    public ResponseEntity<ApiResponse> deleteAssignment(@PathVariable Long id) {
-//        ApiResponse response = assignmentService.deleteAssignment(id);
-//        return response.isSuccess() ? ResponseEntity.ok(response) : ResponseEntity.status(404).body(response);
-//    }
+    // Soft delete assignment by updating isActive to 0 and status to COMPLETED
+    @DeleteMapping(AssignmentConstants.ID)
+    public ResponseEntity<ApiResponse> softDeleteAssignment(@PathVariable("ID") Long assignmentId) {
+       ApiResponse response= assignmentService.softDeleteAssignment(assignmentId);
+        return response.isSuccess() ? ResponseEntity.ok(response) : ResponseEntity.status(404).body(response);
+    }
 
     // Get All Assignments with Pagination
     @GetMapping
@@ -105,16 +112,6 @@ public class AssignmentController {
         ApiResponse response = assignmentService.searchByPlacementType(placementType, page, pageSize);
         return ResponseEntity.ok(response);
     }
-
-//    // Search by Billing Pay Rate with Pagination
-//    @GetMapping(AssignmentConstants.SEARCH_BY_PAY_RATE)
-//    public ResponseEntity<ApiResponse> searchByBillingPayRate(
-//            @RequestParam double payRate,
-//            @RequestParam(defaultValue = "0") int page,
-//            @RequestParam(defaultValue = "10") int pageSize) {
-//        ApiResponse response = assignmentService.searchByBillingPayRate(payRate, page, pageSize);
-//        return ResponseEntity.ok(response);
-//    }
 
     // Search by Date Range with Pagination
     @GetMapping(AssignmentConstants.SEARCH_BY_DATES)

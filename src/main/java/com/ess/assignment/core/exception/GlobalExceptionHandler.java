@@ -1,5 +1,5 @@
 package com.ess.assignment.core.exception;
-import com.ess.assignment.core.api.ApiResponse;
+import com.ess.assignment.core.resp.ApiResponse;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<ApiResponse> handleEntityNotFoundException(EntityNotFoundException ex, WebRequest request) {
-        ApiResponse response = new ApiResponse(false, "Resource not found: " + ex.getMessage(), null, null);
+        ApiResponse response = new ApiResponse(false, "Resource not found: " + ex.getMessage(), null,null);
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
