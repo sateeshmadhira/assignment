@@ -46,6 +46,7 @@ public class AssignmentServiceImpl {
     }
 
     // Create Assignment
+    @Transactional
     public ApiResponse createAssignment(AssignmentRequest assignmentRequest) {
         try {
             Optional<AssignmentEntity> latestAssignment = assignmentRepository.findTopByOrderByAssignmentIdDesc();
@@ -71,12 +72,14 @@ public class AssignmentServiceImpl {
         }
     }
     // Get Assignment by ID
+    @Transactional
     public ApiResponse getAssignmentById(Long id) {
         return assignmentRepository.findById(id)
                 .map(entity -> new ApiResponse(true, "Assignment found", assignmentMapper.toDTO(entity), null))
                 .orElseThrow(() -> new EntityNotFoundException("Assignment with ID " + id + " not found"));
     }
     // Get All Assignments With Counts
+    @Transactional
     public ApiResponse getAllAssignmentsWithCounts() {
 
         // Counts for active and inactive assignments
@@ -100,7 +103,7 @@ public class AssignmentServiceImpl {
     }
 
    // Update assignment status and set isActive accordingly
-@Transactional
+    @Transactional
     public ApiResponse updateAssignmentStatus(Long id, AssignmentRequest assignmentRequest) {
         Optional<AssignmentEntity> optionalAssignment = assignmentRepository.findById(id);
              if (optionalAssignment.isPresent()) {
@@ -128,6 +131,7 @@ public class AssignmentServiceImpl {
     }
 }
     // Soft Delete
+    @Transactional
     public ApiResponse softDeleteAssignment(Long assignmentId) {
         Optional<AssignmentEntity> assignmentOptional = assignmentRepository.findById(assignmentId);
 
@@ -141,6 +145,7 @@ public class AssignmentServiceImpl {
     }
 
     // Get All Assignments
+    @Transactional
     public ApiResponse getAllAssignments(int page, int pageSize) {
 
         Pageable pageable = PageRequest.of(page, pageSize, Sort.unsorted());
@@ -159,6 +164,8 @@ public class AssignmentServiceImpl {
         return new ApiResponse(true, "Assignments retrieved successfully",null,paginationResponse);
     }
 
+    //Global Search
+    @Transactional
     public ApiResponse globalSearch(String searchKey,int page,int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<AssignmentEntity> assignmentEntities = assignmentRepository.globalSearch(searchKey,pageable);
@@ -183,6 +190,7 @@ public class AssignmentServiceImpl {
     }
 
     // Search by Assignment Code with Pagination
+    @Transactional
     public ApiResponse searchByAssignmentCode(String assignmentCode, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<AssignmentEntity> assignments = assignmentRepository.findByAssignmentCodeContainingIgnoreCase(assignmentCode, pageable);
@@ -195,6 +203,7 @@ public class AssignmentServiceImpl {
     }
 
     // Search by Project ID with Pagination
+    @Transactional
     public ApiResponse searchByProjectId(String projectId, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<AssignmentEntity> assignments = assignmentRepository.findByProjectIdContainingIgnoreCase(projectId, pageable);
@@ -207,6 +216,7 @@ public class AssignmentServiceImpl {
     }
 
     // Search by Work Location Country with Pagination
+    @Transactional
     public ApiResponse searchByWorkLocationCountry(String country, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<AssignmentEntity> assignments = assignmentRepository.findByWorkLocationCountryContainingIgnoreCase(country, pageable);
@@ -219,6 +229,7 @@ public class AssignmentServiceImpl {
     }
 
     // Search by Status with Pagination
+    @Transactional
     public ApiResponse searchByStatus(Status status, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<AssignmentEntity> assignments = assignmentRepository.findByStatus(status, pageable);
@@ -231,6 +242,7 @@ public class AssignmentServiceImpl {
     }
 
     // Search by Placement Type with Pagination
+    @Transactional
     public ApiResponse searchByPlacementType(PlacementType placementType, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<AssignmentEntity> assignments = assignmentRepository.findByPlacementType(placementType, pageable);
@@ -243,6 +255,7 @@ public class AssignmentServiceImpl {
     }
 
     // Search by Billing Pay Rate with Pagination
+    @Transactional
     public ApiResponse searchByBillingPayRate(double payRate, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<AssignmentEntity> assignments = assignmentRepository.findByBillingPayRate(payRate, pageable);
@@ -255,6 +268,7 @@ public class AssignmentServiceImpl {
     }
 
     // Search by Date Range with Pagination
+    @Transactional
     public ApiResponse searchByDateRange(Date startDate, Date endDate, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
         Page<AssignmentEntity> assignments = assignmentRepository.findByDateRange(startDate, endDate, pageable);

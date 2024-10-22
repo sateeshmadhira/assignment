@@ -12,7 +12,7 @@ public class EmployeeEntity {
     private Long id;
 
     @Column(name = "EMPLOYEE_ID")
-    private String employeeId;
+    private Long employeeId;
 
     @ManyToOne
     @JoinColumn(name = "ASSIGNMENT_ID")

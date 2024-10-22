@@ -6,7 +6,7 @@ import lombok.Data;
 public class EmployeeDTO {
 
     private Long id;
-    private String employeeId;
+    private Long employeeId;
     private Long assignmentIdRef;
 
 }
