@@ -1,4 +1,5 @@
 package com.ess.assignment.infrastructure.controller;
+import com.ess.assignment.core.req.SearchReq;
 import com.ess.assignment.core.resp.ApiResponse;
 import com.ess.assignment.core.constants.AssignmentConstants;
 import com.ess.assignment.core.req.AssignmentRequest;
@@ -125,12 +126,14 @@ public class AssignmentController {
     }
 
     // Global Search with Pagination
-    @GetMapping(AssignmentConstants.SEARCH_BY_SEARCH)
-    public ResponseEntity<ApiResponse> globalSearch(
-            @RequestParam String searchKey,
-            @RequestParam(defaultValue = "0") int page,
-            @RequestParam(defaultValue = "10") int pageSize) {
-        ApiResponse response = assignmentService.globalSearch(searchKey, page, pageSize);
+    @PostMapping(AssignmentConstants.SEARCH_BY_SEARCH)
+    public ResponseEntity<ApiResponse> globalSearch(@RequestBody SearchReq searchReq) {
+        ApiResponse response = assignmentService.globalSearch(
+                searchReq.getSearchKey(),
+                searchReq.getPage(),
+                searchReq.getPageSize()
+        );
         return ResponseEntity.ok(response);
     }
+
 }

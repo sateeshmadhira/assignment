@@ -48,7 +48,9 @@ public interface AssignmentRepository extends JpaRepository<AssignmentEntity,Lon
     @Query("SELECT a FROM AssignmentEntity a WHERE a.startDate >= :startDate AND a.endDate <= :endDate")
     Page<AssignmentEntity> findByDateRange(@Param("startDate") Date startDate, @Param("endDate") Date endDate, Pageable pageable);
 
-    // Global search query to match any of the criteria: assignmentCode, country, assignmentTitle
+//    Page<AssignmentEntity> getAll(Pageable pageable);
+
+    //Global Search
     @Query("SELECT a FROM AssignmentEntity a " +
             "LEFT JOIN a.workLocationEntity w " +
             "WHERE (:searchKey IS NULL OR " +
@@ -56,8 +58,9 @@ public interface AssignmentRepository extends JpaRepository<AssignmentEntity,Lon
             "LOWER(a.projectId) LIKE LOWER(CONCAT('%', :searchKey, '%')) OR " +
             "LOWER(w.reportingManagerName) LIKE LOWER(CONCAT('%', :searchKey, '%')) OR " +
             "LOWER(a.status) LIKE LOWER(CONCAT('%', :searchKey, '%')) OR " +
-            "LOWER(a.assignmentTitle) LIKE LOWER(CONCAT('%', :searchKey, '%')))")
-    Page<AssignmentEntity>  globalSearch(@Param("searchKey") String searchKey, Pageable pageable);
+            "LOWER(a.assignmentTitle) LIKE LOWER(CONCAT('%', :searchKey, '%'))) ")
+    Page<AssignmentEntity> globalSearch(@Param("searchKey") String searchKey, Pageable pageable);
+
 
     // Method to find all active assignments
     long countByIsActive(Integer isActive);

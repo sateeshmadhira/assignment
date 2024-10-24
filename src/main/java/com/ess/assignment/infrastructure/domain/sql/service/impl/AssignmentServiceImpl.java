@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AssignmentServiceImpl {
@@ -166,13 +167,17 @@ public class AssignmentServiceImpl {
 
     //Global Search
     @Transactional
-    public ApiResponse globalSearch(String searchKey,int page,int pageSize) {
+    public ApiResponse globalSearch(String searchKey, int page, int pageSize) {
         Pageable pageable = PageRequest.of(page, pageSize);
-        Page<AssignmentEntity> assignmentEntities = assignmentRepository.globalSearch(searchKey,pageable);
-
+        Page<AssignmentEntity> assignmentEntities;
+        if (searchKey != null) {
+            assignmentEntities = assignmentRepository.globalSearch(searchKey, pageable);
+        } else {
+            assignmentEntities = assignmentRepository.findAll(pageable);
+        }
         List<AssignmentDTO> assignmentDTOs = assignmentEntities.stream()
                 .map(assignmentMapper::toDTO)
-                .toList();
+                .collect(Collectors.toList());
 
         PaginationResponse<AssignmentDTO> paginationResponse = new PaginationResponse<>(
                 assignmentEntities.getNumber(),
@@ -188,6 +193,7 @@ public class AssignmentServiceImpl {
 
         return new ApiResponse(true, "Assignments found", null, paginationResponse);
     }
+
 
     // Search by Assignment Code with Pagination
     @Transactional

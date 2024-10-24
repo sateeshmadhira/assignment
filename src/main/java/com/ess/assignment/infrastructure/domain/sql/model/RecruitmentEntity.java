@@ -27,6 +27,8 @@ public class RecruitmentEntity {
     @Column(name = "RECRUITER")
     private String recruiter;
 
+    @Column(name = "EXTERNAL_RECRUITER")
+    private String externalRecruiter;
 
     @OneToOne
     @JoinColumn(name = "ASSIGNMENT_ID")
